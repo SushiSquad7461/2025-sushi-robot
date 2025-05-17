@@ -75,19 +75,19 @@ public class Intake extends SubsystemBase {
 
     public Command reset(boolean up) {
         return up
-            ? runOnce(() -> pivotMotor.set(-0.1))
-                .andThen(Commands.waitUntil(this::currentSpikeUp))
+            ? runOnce(() -> pivotMotor.set(0.0))
+                // .andThen(Commands.waitUntil(this::currentSpikeUp))
                 .andThen(() -> {
                     pivotMotor.stopMotor();
-                    pivotMotor.setPosition(0);
-                    pivotMotor.setControl(positionDutyCycle.withPosition(0));
+                    // pivotMotor.setPosition(0);
+                    // pivotMotor.setControl(positionDutyCycle.withPosition(0));
                 })
-            : runOnce(() -> pivotMotor.set(0.1))
-                .andThen(Commands.waitUntil(this::currentSpikeDown))
+            : runOnce(() -> pivotMotor.set(0.0))
+                // .andThen(Commands.waitUntil(this::currentSpikeDown))
                 .andThen(() -> {
                     pivotMotor.stopMotor();
-                    pivotMotor.setPosition(Constants.AlgaeIntake.INTAKE_ANGLE);
-                    pivotMotor.setControl(positionDutyCycle.withPosition(Constants.AlgaeIntake.INTAKE_ANGLE));
+                    // pivotMotor.setPosition(Constants.AlgaeIntake.INTAKE_ANGLE);
+                    // pivotMotor.setControl(positionDutyCycle.withPosition(Constants.AlgaeIntake.INTAKE_ANGLE));
                 });
     }
 
@@ -123,17 +123,19 @@ public class Intake extends SubsystemBase {
 
     //Changes the state of the intake
     public Command changeState(IntakeState newState) {
+        return Commands.none();
         //Will check to see if intake is up, if it, lower intake, else, raise intake
-        final Command pivotCommand = newState.intakeExtended
-            ? changePivotPos(Constants.AlgaeIntake.LOWERED_POS).andThen(reset(false))
-            : changePivotPos(Constants.AlgaeIntake.RAISED_POS).andThen(reset(true));
+        // final Command pivotCommand = newState.intakeExtended
+        //     ? changePivotPos(Constants.AlgaeIntake.LOWERED_POS).andThen(reset(false))
+        //     : changePivotPos(Constants.AlgaeIntake.RAISED_POS).andThen(reset(true));
         //Checks to see if state reverses intake, if it does then reverse intake, if not run intake
-        final Command intakeCommand = switch(newState.direction) {
-            case REVERSE -> reverseIntake();
-            case FORWARD -> runIntake();
-            case OFF -> stopIntake();
-        };
-        return pivotCommand.andThen(intakeCommand);
+        // final Command intakeCommand = switch(newState.direction) {
+        //     case REVERSE -> reverseIntake();
+        //     case FORWARD -> runIntake();
+        //     case OFF -> stopIntake();
+        // };
+        // return intakeCommand;
+        // return pivotCommand.andThen(intakeCommand);
     }
 
     
